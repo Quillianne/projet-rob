@@ -39,7 +39,7 @@ NEW_IP=${NEW_IP:-$IP} # Si l'utilisateur n'entre rien, garder l'adresse actuelle
 # Génération du fichier Netplan
 NETPLAN_FILE="/etc/netplan/01-netcfg.yaml"
 
-cat <<EOL | sudo tee $NETPLAN_FILE
+cat <<EOL | sudo tee $NETPLAN_FILE > /dev/null
 network:
   version: 2
   renderer: networkd
@@ -47,15 +47,20 @@ network:
     $INTERFACE:
       addresses:
         - $NEW_IP/$NETMASK
-      gateway4: $GATEWAY
+      routes:
+        - to: default
+          via: $GATEWAY
       nameservers:
         addresses:
           - $DNS
 EOL
 
+# Ajustement des permissions du fichier
+sudo chmod 600 $NETPLAN_FILE
+
 # Application de la configuration
 echo "Configuration appliquée :"
-cat $NETPLAN_FILE
+sudo netplan generate
 sudo netplan apply
 
 echo "Configuration réseau statique appliquée pour $INTERFACE avec l'adresse IP $NEW_IP"
