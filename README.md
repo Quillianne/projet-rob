@@ -42,7 +42,6 @@ Dossier contenant le code source principal du projet.
 
 ### **2. `tests/`**
 Dossier contenant les tests unitaires et fonctionnels pour vérifier le bon fonctionnement de chaque module.
-- **`photos_test`** : Contient plusieurs photos en .png pour tester le fonctionner de l'API.
 - `test_navigation.py` : Tests pour les fonctionnalités de navigation.
 - `test_sensors.py` : Tests pour les capteurs.
 - `test_controllers.py` : Tests pour les contrôleurs.
