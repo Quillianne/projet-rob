@@ -1,0 +1,16 @@
+-------------------------------  notes  ----------------------------------
+
+commandes xdotool :
+xdotool mousemove 0 0
+xdotool getmouselocation
+
+pour simuler un écran virtuel :
+installer xvfb :
+sudo apt-get update
+sudo apt-get install xvfb
+
+lancer la session virtuelle :
+Xvfb :99 -screen 0 1024x768x16 &
+export DISPLAY=:99
+
+

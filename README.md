@@ -50,8 +50,10 @@ Dossier contenant les tests unitaires et fonctionnels pour vérifier le bon fonc
 
 ### **3. `docs/`**
 Dossier pour la documentation du projet.
-- `README.md` : Document principal expliquant l'arborescence et les fonctionnalités du projet.
-- `architecture_diagram.png` : Diagramme expliquant l'architecture du projet.
+- `README.md` : Document principal expliquant l'arborescence et les fonctionnalités du projet, avec le lien d'accès au fichier google docs avec l'avancement du projet à chaque séance.
+- **`demande_budget`** : Fichier pdf et xls de demande de budget.
+- **`photos_avancement`** : Photos du groupe au cours du premier semestre.
+- **`ingenierie_systeme`** : TD1 et TD2 d'ingenierie système : architecture matérielle, use-case etc...
 
 ### **4. Fichiers Racine**
 - `requirements.txt` : Liste des dépendances nécessaires pour le projet.
