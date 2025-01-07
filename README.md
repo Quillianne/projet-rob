@@ -62,7 +62,7 @@ Dossier pour la documentation du projet.
 ## Instructions pour l'Installation
 1. Clonez ce dépôt :
    ```bash
-   git clone <URL_DU_DEPOT>
+   git clone https://github.com/Quillianne/projet-rob
    ```
 2. Installez les dépendances :
    ```bash
