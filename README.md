@@ -42,6 +42,7 @@ Dossier contenant le code source principal du projet.
 
 ### **2. `tests/`**
 Dossier contenant les tests unitaires et fonctionnels pour vérifier le bon fonctionnement de chaque module.
+- **`photos_test`** : Contient plusieurs photos en .png pour tester le fonctionner de l'API.
 - `test_navigation.py` : Tests pour les fonctionnalités de navigation.
 - `test_sensors.py` : Tests pour les capteurs.
 - `test_controllers.py` : Tests pour les contrôleurs.
@@ -50,8 +51,10 @@ Dossier contenant les tests unitaires et fonctionnels pour vérifier le bon fonc
 
 ### **3. `docs/`**
 Dossier pour la documentation du projet.
-- `README.md` : Document principal expliquant l'arborescence et les fonctionnalités du projet.
-- `architecture_diagram.png` : Diagramme expliquant l'architecture du projet.
+- `README.md` : Document principal expliquant l'arborescence et les fonctionnalités du projet, avec le lien d'accès au fichier google docs avec l'avancement du projet à chaque séance.
+- **`demande_budget`** : Fichier pdf et xls de demande de budget.
+- **`photos_avancement`** : Photos du groupe au cours du premier semestre.
+- **`ingenierie_systeme`** : TD1 et TD2 d'ingenierie système : architecture matérielle, use-case etc...
 
 ### **4. Fichiers Racine**
 - `requirements.txt` : Liste des dépendances nécessaires pour le projet.
