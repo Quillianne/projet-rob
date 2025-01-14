@@ -2,7 +2,7 @@ import serial
 import time
 
 class PololuController:
-    def __init__(self, port='COM6', baudrate=57600, timeout=1):
+    def __init__(self, port='/dev/ttyACM0', baudrate=57600, timeout=1):
         self.serial_port = serial.Serial(port, baudrate, timeout=timeout)
         time.sleep(2)  # Donner le temps à la connexion de s'établir
 
@@ -41,7 +41,7 @@ class PololuController:
 
 if __name__ == "__main__":
     # Initialisation du contrôleur Pololu
-    pololu = PololuController(port='COM6')
+    pololu = PololuController(port='/dev/ttyACM0')
 
     try:
         # Test des moteurs
