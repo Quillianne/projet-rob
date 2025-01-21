@@ -68,7 +68,7 @@ if __name__ == "__main__":
             #print("Arrêt...")
             #pololu.set_motor_speed(-0.5, 0)  # stop les moteurs
             #time.sleep(1)
-        pololu.set_motor_speed(0, -0.5)
+        pololu.set_motor_speed(-0.2, -0.3)
     finally:
         pololu.disconnect()
         print("Connexion terminée.")

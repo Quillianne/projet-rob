@@ -12,12 +12,15 @@ class MotorControl:
         :param right_speed: Vitesse du moteur droit (-1.0 à 1.0).
         """
         # Utilisation des formules de calibration spécifiques
-        left_target = int(5050 + 10 * left_speed)  # Ajustement pour le moteur gauche
-        right_target = int(5985 - 10 * right_speed)  # Ajustement pour le moteur droit
+        left_target = int(6000 + 20 * left_speed)  # Ajustement pour le moteur gauche
+        right_target = int(6000 - 20 * right_speed)  # Ajustement pour le moteur droit
 
         # Vérifier les limites (4000-8000)
         left_target = max(4000, min(8000, left_target))
         right_target = max(4000, min(8000, right_target))
+
+        #print target
+        print(f"left target: {left_target} | right target: {right_target}")
 
         # Envoyer les commandes aux moteurs via la Pololu
         self.controller.set_target(0, left_target)  # Canal 0 : moteur gauche

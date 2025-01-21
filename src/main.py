@@ -7,7 +7,7 @@ if __name__ == "__main__":
     try:
         
         # Exemple : faire varier la vitesse des moteurs
-        for speed in [-100,-21,-20,-19,0,19,20,21,100]:
+        for speed in [-100, 0 ,100]:
             print(f"Réglage des moteurs à la vitesse : {speed}")
             motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en opposition
             time.sleep(2)
