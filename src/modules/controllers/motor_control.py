@@ -12,8 +12,8 @@ class MotorControl:
         :param right_speed: Vitesse du moteur droit (-1.0 à 1.0).
         """
         # Utilisation des formules de calibration spécifiques
-        left_target = int(5000 + 1000 * left_speed)  # Ajustement pour le moteur gauche
-        right_target = int(6000 - 1000 * right_speed)  # Ajustement pour le moteur droit
+        left_target = int(5050 + 10 * left_speed)  # Ajustement pour le moteur gauche
+        right_target = int(5985 - 10 * right_speed)  # Ajustement pour le moteur droit
 
         # Vérifier les limites (4000-8000)
         left_target = max(4000, min(8000, left_target))

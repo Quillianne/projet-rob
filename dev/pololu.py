@@ -60,15 +60,15 @@ if __name__ == "__main__":
         #pololu.set_motor_speed(-0.375, 0.5)  # Tourne sur place (moteur gauche recule, droit avance).
         #time.sleep(2)
 
-        for i in np.arange(-1, 1, 0.1):  # Utilisation de np.arange pour des pas décimaux
-            print(f"Fonctionne avec {i}")
-            pololu.set_motor_speed(i, i)  # Définir la vitesse du moteur gauche
-            time.sleep(2)
+        # for i in np.arange(-1, 1, 0.1):  # Utilisation de np.arange pour des pas décimaux
+        #     print(f"Fonctionne avec {i}")
+        #     pololu.set_motor_speed(i, i)  # Définir la vitesse du moteur gauche
+        #     time.sleep(2)
 
             #print("Arrêt...")
             #pololu.set_motor_speed(-0.5, 0)  # stop les moteurs
             #time.sleep(1)
-        pololu.set_motor_speed(0, 0)
+        pololu.set_motor_speed(0, -0.5)
     finally:
         pololu.disconnect()
         print("Connexion terminée.")
