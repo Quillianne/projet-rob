@@ -7,13 +7,13 @@ import logging
 
 logging.getLogger("MotorControl").setLevel(logging.INFO)
 logging.getLogger("IMUSensor").setLevel(logging.INFO)
-#logging.getLogger("freenect2").setLevel(logging.WARNING)
-#logging.getLogger("ktb").setLevel(logging.WARNING)
+# logging.getLogger("freenect2").setLevel(logging.WARNING)
+# logging.getLogger("ktb").setLevel(logging.WARNING)
 
 if __name__ == "__main__":
     # Initialisation des modules
     motors = MotorControl(port='/dev/ttyACM0')
-    imu = IMUSensor(port="/dev/ttyUSB1", baudrate=57600)
+    imu = IMUSensor(port="/dev/ttyUSB2", baudrate=57600)
     kinect = KinectSensor(output_dir="kinect_images")
 
     try:

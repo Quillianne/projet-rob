@@ -7,7 +7,7 @@ lidar = RPLidar(PORT_NAME)
 
 # Lancer la récupération de données (exemple)
 print("Démarrage du LiDAR")
-lidar.stop_motor()
+lidar.start_motor()
 time.sleep(4)
 # Effectuer quelques actions ou attendre un certain temps
 try:
