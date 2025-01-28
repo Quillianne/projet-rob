@@ -1,7 +1,7 @@
 from rplidar import RPLidar
 import time
 # Port du LiDAR (vérifiez le port série, souvent /dev/ttyUSB0 sur Linux)
-PORT_NAME = '/dev/ttyUSB1'
+PORT_NAME = '/dev/ttyUSB2'
 
 lidar = RPLidar(PORT_NAME)
 

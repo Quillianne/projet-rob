@@ -6,7 +6,7 @@ import serial
 # baudrate = 9600        
 
 # port USB0 :
-port = "/dev/ttyUSB2"
+port = "/dev/ttyUSB1"
 baudrate = 57600
 
 try:

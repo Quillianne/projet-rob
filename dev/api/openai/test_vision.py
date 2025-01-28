@@ -9,7 +9,7 @@ def encode_image(image_path):
         return base64.b64encode(image_file.read()).decode("utf-8")
 
 # Path to your image
-image_path = "./photos/porte_07.png"
+image_path = "./photos/porte_04.png"
 file_prompt = open("prompt.txt", "r")
 prompt = file_prompt.read()
 
@@ -18,7 +18,7 @@ prompt = file_prompt.read()
 base64_image = encode_image(image_path)
 
 response = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="gpt-4-turbo",
     messages=[
         {
             "role": "user",
