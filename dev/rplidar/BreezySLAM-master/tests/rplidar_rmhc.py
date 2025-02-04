@@ -72,7 +72,14 @@ if __name__ == '__main__':
         distances = [item[2] for item in items]
         angles    = [item[1] for item in items]
         print(len(distances))
-             
+    
+        full_angles = np.arange(0, 360, 1)
+        full_distances = np.ones(360) * 3000  # On met toutes les distances à 3 mètres par défaut
+        for angle, dist in zip(angles, distances):
+            full_distances[int(round(angle))] = dist 
+        distances = [float(d) for d in full_distances]
+        angles = [float(a) for a in full_angles]
+
         # Update SLAM with current Lidar scan and scan angles if adequate
         if len(distances) > MIN_SAMPLES:
             slam.update(distances, scan_angles_degrees=angles)
@@ -89,11 +96,12 @@ if __name__ == '__main__':
 
         cnt+=1 
 
-        if cnt == 2:
+        if cnt == 10:
+            print(angles, distances)
             # Get current map bytes as grayscale
             slam.getmap(mapbytes)
             image=Image.frombytes('L',(MAP_SIZE_PIXELS,MAP_SIZE_PIXELS),bytes(mapbytes))
-            image.save("image_test.png")
+            image.save("images/image_test.png")
 
             plt.figure(figsize=(6, 6))
             for i in range(len(distances)):
@@ -105,7 +113,7 @@ if __name__ == '__main__':
             plt.xlim(-5000, 5000)  # Adapter aux distances réelles du Lidar
             plt.ylim(-5000, 5000)
             plt.title("Points du dernier scan Lidar")
-            plt.savefig("lidar_points.png")
+            plt.savefig("images/lidar_points.png")
             plt.close()
             break
 

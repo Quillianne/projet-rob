@@ -30,6 +30,7 @@ LIDAR_DEVICE            = '/dev/ttyUSB1'
 MIN_SAMPLES   = 40
 
 from breezyslam.algorithms import RMHC_SLAM
+from breezyslam.algorithms import Deterministic_SLAM
 from breezyslam.sensors import RPLidarA2 as LaserModel
 from rplidar import RPLidar as Lidar
 from PIL import Image
@@ -42,8 +43,8 @@ if __name__ == '__main__':
     lidar = Lidar(LIDAR_DEVICE)
 
     # Create an RMHC SLAM object with a laser model and optional robot model
-    slam = RMHC_SLAM(LaserModel(), MAP_SIZE_PIXELS, MAP_SIZE_METERS)
-
+    #slam = RMHC_SLAM(LaserModel(), MAP_SIZE_PIXELS, MAP_SIZE_METERS)
+    slam = Deterministic_SLAM(LaserModel(), MAP_SIZE_PIXELS, MAP_SIZE_METERS)
     # Set up a SLAM display
 
     # Initialize an empty trajectory
@@ -90,10 +91,11 @@ if __name__ == '__main__':
         cnt+=1 
 
         if cnt == 2:
+            print(angle, distances)
             # Get current map bytes as grayscale
             slam.getmap(mapbytes)
             image=Image.frombytes('L',(MAP_SIZE_PIXELS,MAP_SIZE_PIXELS),bytes(mapbytes))
-            image.save("image_test.png")
+            image.save("images/image_test.png")
 
             plt.figure(figsize=(6, 6))
             for i in range(len(distances)):
@@ -105,7 +107,7 @@ if __name__ == '__main__':
             plt.xlim(-5000, 5000)  # Adapter aux distances réelles du Lidar
             plt.ylim(-5000, 5000)
             plt.title("Points du dernier scan Lidar")
-            plt.savefig("lidar_points.png")
+            plt.savefig("images/lidar_points.png")
             plt.close()
             break
 
