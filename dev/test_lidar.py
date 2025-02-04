@@ -1,33 +1,46 @@
-from rplidar import RPLidar
+from rplidar import RPLidar, RPLidarException
+import numpy as np
+import matplotlib.pyplot as plt
 import time
-# Port du LiDAR (vérifiez le port série, souvent /dev/ttyUSB0 sur Linux)
+
+# Port du LiDAR
 PORT_NAME = '/dev/ttyUSB1'
 
+# Initialisation du LiDAR
 lidar = RPLidar(PORT_NAME)
-
-# Lancer la récupération de données (exemple)
 print("Démarrage du LiDAR")
 lidar.start_motor()
-lidar.motor_speed = 1000
-time.sleep(4)
-info = lidar.get_info()
-health = lidar.get_health()
-print(info)
-print(health)
-cnt = 0
-# Effectuer quelques actions ou attendre un certain temps
+time.sleep(2)  # Attendre que le moteur démarre correctement
+
+# Collecter toutes les données
+scan_data = []
+
 try:
-    print("Collecte de données...")
-    for scan in lidar.iter_scans():
-        print(f"Nombre de points: {len(scan)}")
-        # for (_, angle, distance) in scan:
-        #     print(f"Angle: {angle:.2f}, Distance: {distance:.2f}")
-        cnt += 1
-        if cnt >= 10 :
-            # Si tu veux arrêter après un certain nombre de scans, tu peux mettre une condition ici
-            break  # On arrête après un scan pour l'exemple
+    print("Collecte des données...")
+    for i, measurment in enumerate(lidar.iter_measurments()):
+        new_scan, quality, angle, distance = measurment  # Décomposition correcte en 4 variables
+        if distance > 0:  # Ignorer les distances nulles
+            scan_data.append((np.radians(angle), distance))
+        
+        if i > 5000:  # Limite de mesure (par exemple, 5000 mesures)
+            break
+
+except RPLidarException as e:
+    print(f"Erreur LiDAR : {e}")
+
 finally:
     print("Arrêt du LiDAR")
     lidar.stop_motor()
     lidar.stop()
     lidar.disconnect()
+
+# Visualisation des données après collecte
+if scan_data:
+    angles, distances = zip(*scan_data)
+
+    plt.figure(figsize=(10, 10))
+    ax = plt.subplot(111, projection='polar')
+    ax.scatter(angles, distances, c='blue', s=5, alpha=0.75)
+    ax.set_title("Visualisation complète des données LiDAR")
+    ax.set_ylim(0, max(distances) + 100)
+    plt.show()

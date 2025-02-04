@@ -18,7 +18,7 @@ class LidarScanner:
         """ Démarre le moteur du LiDAR. """
         print("Démarrage du LiDAR...")
         self.lidar.start_motor()
-        time.sleep(4)  # Temps d'attente pour que le LiDAR soit prêt
+        time.sleep(5)  # Temps d'attente pour que le LiDAR soit prêt
 
     def stop(self):
         """ Arrête le moteur et déconnecte le LiDAR. """
@@ -30,6 +30,7 @@ class LidarScanner:
     def read(self):
         """ Lit un scan et retourne les données brutes. """
         print("Lecture des données...")
+        print("iter_scan:", self.lidar.iter_scans())
         for scan in self.lidar.iter_scans():
             return scan  # Retourne le premier scan trouvé
 
@@ -86,10 +87,9 @@ class LidarScanner:
 
 # Exemple d'utilisation
 if __name__ == "__main__":
-    lidar_scanner = LidarScanner(port="/dev/ttyUSB2", output_file="data_lidar.dat")
+    lidar_scanner = LidarScanner(port="/dev/ttyUSB1", output_file="data_lidar.dat")
     lidar_scanner.start()
-    for _ in range(20):
-        scan1 = lidar_scanner.debug()
-        scan2 = lidar_scanner.save()
-        time.sleep(1)
-    lidar_scanner.stop()
+    try:  
+        lidar_scanner.debug()
+    finally:
+        lidar_scanner.stop()
