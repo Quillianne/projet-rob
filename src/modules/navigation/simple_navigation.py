@@ -25,7 +25,7 @@ class SimpleNavigation:
         self.logger.info("Initialisation de la navigation simple avec asservissement IMU.")
         
         # Initialiser l'IMU et le contrôleur moteur
-        self.imu = IMUSensor(port=imu_port)
+        self.imu = IMUSensor(port=imu_port,baudrate=57600)
         self.motor_control = MotorControl(port=motor_port)
 
         # Gains proportionnels
@@ -121,7 +121,7 @@ class SimpleNavigation:
                 error -= 360
             elif error < -180:
                 error += 360
-
+            print(initial_yaw, yaw, target_yaw)
             self.logger.debug("Erreur actuelle : %.2f°", error)
 
             # Si l'orientation cible est atteinte, arrêter la rotation
