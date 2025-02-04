@@ -41,6 +41,7 @@ class LidarScanner:
             print(f"Nombre de points : {len(scan)}")
             for (_, angle, distance) in scan:
                 print(f"Angle : {angle:.2f}, Distance : {distance:.2f}")
+            return scan
 
     def save(self):
         """ Lit un scan et sauvegarde les distances (0° à 360°) dans un fichier. """
@@ -57,8 +58,9 @@ class LidarScanner:
                 f.write(" ".join(map(str, distances)) + "\n")
 
             print(f"Scan enregistré dans {self.output_file}")
-
-    def run(self, mode='debug'):
+            return scan
+        
+    def run(self, mode='read'):
         """
         Exécute le LiDAR selon le mode choisi.
         
@@ -67,12 +69,11 @@ class LidarScanner:
         try:
             self.start()
             if mode == 'debug':
-                self.debug()
+                data = self.debug()
             elif mode == 'save':
-                self.save()
+                data = self.save()
             elif mode == 'read':
                 data = self.read()
-                print("Données brutes récupérées :", data)
             else:
                 print("Mode inconnu. Utilisez 'debug', 'save' ou 'read'.")
         except KeyboardInterrupt:
@@ -86,4 +87,9 @@ class LidarScanner:
 # Exemple d'utilisation
 if __name__ == "__main__":
     lidar_scanner = LidarScanner(port="/dev/ttyUSB2", output_file="data_lidar.dat")
-    lidar_scanner.run(mode='debug')  # Modes disponibles : 'debug', 'save', 'read'
+    lidar_scanner.start()
+    for _ in range(20):
+        scan1 = lidar_scanner.debug()
+        scan2 = lidar_scanner.save()
+        time.sleep(1)
+    lidar_scanner.stop()
