@@ -27,12 +27,12 @@ LIDAR_DEVICE            = '/dev/ttyUSB1'
 # Ideally we could use all 250 or so samples that the RPLidar delivers in one 
 # scan, but on slower computers you'll get an empty map and unchanging position
 # at that rate.
-MIN_SAMPLES   = 200
+MIN_SAMPLES   = 40
 
 from breezyslam.algorithms import RMHC_SLAM
-from breezyslam.sensors import RPLidarA1 as LaserModel
+from breezyslam.sensors import RPLidarA2 as LaserModel
 from rplidar import RPLidar as Lidar
-from roboviz import MapVisualizer
+from PIL import Image
 
 if __name__ == '__main__':
 
@@ -43,7 +43,6 @@ if __name__ == '__main__':
     slam = RMHC_SLAM(LaserModel(), MAP_SIZE_PIXELS, MAP_SIZE_METERS)
 
     # Set up a SLAM display
-    viz = MapVisualizer(MAP_SIZE_PIXELS, MAP_SIZE_METERS, 'SLAM')
 
     # Initialize an empty trajectory
     trajectory = []
@@ -61,6 +60,7 @@ if __name__ == '__main__':
     # First scan is crap, so ignore it
     next(iterator)
 
+    cnt=0
     while True:
 
         # Extract (quality, angle, distance) triples from current scan
@@ -69,7 +69,8 @@ if __name__ == '__main__':
         # Extract distances and angles from triples
         distances = [item[2] for item in items]
         angles    = [item[1] for item in items]
-
+        print(len(distances))
+             
         # Update SLAM with current Lidar scan and scan angles if adequate
         if len(distances) > MIN_SAMPLES:
             slam.update(distances, scan_angles_degrees=angles)
@@ -82,14 +83,18 @@ if __name__ == '__main__':
 
         # Get current robot position
         x, y, theta = slam.getpos()
+        print(x,y)
 
-        # Get current map bytes as grayscale
-        slam.getmap(mapbytes)
+        cnt+=1 
 
-        # Display map and robot pose, exiting gracefully if user closes it
-        if not viz.display(x/1000., y/1000., theta, mapbytes):
-            exit(0)
- 
+        if cnt == 50:
+            # Get current map bytes as grayscale
+            slam.getmap(mapbytes)
+            image=Image.frombytes('L',(MAP_SIZE_PIXELS,MAP_SIZE_PIXELS),bytes(mapbytes))
+            image.save("image_test.png")
+            break
+
+    
     # Shut down the lidar connection
     lidar.stop()
     lidar.disconnect()
