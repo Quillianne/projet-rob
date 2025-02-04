@@ -3,3 +3,4 @@ openai
 numpy
 cython==0.29.36
 ktb
+openai

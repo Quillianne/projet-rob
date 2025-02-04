@@ -20,8 +20,8 @@ class MotorControl:
         """
         Définit la vitesse des moteurs gauche et droit en utilisant vos formules spécifiques.
 
-        :param left_speed: Vitesse du moteur gauche (-1.0 à 1.0).
-        :param right_speed: Vitesse du moteur droit (-1.0 à 1.0).
+        :param left_speed: Vitesse du moteur gauche (-100 à 100).
+        :param right_speed: Vitesse du moteur droit (-100 à 100).
         """
         self.logger.debug("Définition de la vitesse des moteurs : gauche=%s, droite=%s", left_speed, right_speed)
 
