@@ -1,6 +1,7 @@
 from modules.controllers.motor_control import MotorControl
 from modules.sensors.imu import IMUSensor
 from modules.sensors.kinect import KinectSensor
+from utils.sensormapper import SensorUSBMapper
 import time
 import logging
 
@@ -12,6 +13,26 @@ logging.getLogger("IMUSensor").setLevel(logging.INFO)
 
 if __name__ == "__main__":
     # Initialisation des modules
+
+    # Configuration des capteurs avec leurs VID et PID
+    sensor_config = {
+        "lidar": {"vid": "10c4", "pid": "ea60"},  # Exemple pour le RPLIDAR 10c4:ea60
+        "imu": {"vid": "1a86", "pid": "7523"},    # Exemple pour l'IMU OpenLog 1a86:7523
+        "pololu": {"vid": "1ffb", "pid": "008b"}  # Exemple pour le Pololu Maestro 1ffb:008b
+    }
+
+    # Instanciation de la classe
+    mapper = SensorUSBMapper(sensor_config)
+
+    # Mapping des capteurs
+    sensor_mapping = mapper.map_sensors()
+
+    # Affichage des résultats
+    print("Sensor Mapping:")
+    for sensor, path in sensor_mapping.items():
+        print(f"{sensor}: {path if path else 'Not Found'}")
+
+"""
     motors = MotorControl(port='/dev/ttyACM0')
     imu = IMUSensor(port="/dev/ttyUSB2", baudrate=57600)
     kinect = KinectSensor(output_dir="kinect_images")
@@ -54,3 +75,5 @@ if __name__ == "__main__":
         imu.close()
         motors.disconnect()
         logging.info("Programme terminé proprement.")
+
+"""
