@@ -66,3 +66,11 @@ class RPLidarA1(Laser):
         
         Laser.__init__(self, 360, 5.5, 360, 12000, detectionMargin, offsetMillimeters)
 
+class RPLidarA2(Laser):
+    '''
+    A class for the SLAMTEC RPLidar A1
+    '''
+    def __init__(self, detectionMargin = 0, offsetMillimeters = 0):
+        
+        Laser.__init__(self, 1600, 10, 360, 12000, detectionMargin, offsetMillimeters)
+
