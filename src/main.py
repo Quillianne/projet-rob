@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     navigator = SimpleNavigation(imu_port=sensor_mapping["imu"], motor_port=sensor_mapping["pololu"])
     api = VisionAPI(api_key="env", prompt="import_txt")
-    #kinect = KinectSensor(output_dir="kinect_images")
+    kinect = KinectSensor(output_dir="kinect_images")
 
     try:
         # Connexion à l'IMU
@@ -71,14 +71,14 @@ if __name__ == "__main__":
         motors.stop()
 
         # Capture et affichage de l'image raw_color depuis Kinect
-        #frames = kinect.get_raw_color()
+        frames = kinect.get_raw_color()
 
         
 
-        #if frames and "raw_color" in frames:
-        #    kinect.save_frames(frames)  # Sauvegarde les frames
+        if frames and "raw_color" in frames:
+           kinect.save_frames(frames)  # Sauvegarde les frames
 
-            #kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
+           kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
         
         response = api.send_request(image_path="kinect_images/raw_color.png")
         response = api.return_clean_json(response)
