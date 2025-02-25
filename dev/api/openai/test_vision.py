@@ -9,7 +9,7 @@ def encode_image(image_path):
         return base64.b64encode(image_file.read()).decode("utf-8")
 
 # Path to your image
-image_path = "./photos/porte_04.png"
+image_path = "./photos/porte_1.png"
 file_prompt = open("prompt.txt", "r")
 prompt = file_prompt.read()
 
