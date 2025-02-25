@@ -1,5 +1,6 @@
 import base64
 import os
+import json
 import logging
 from openai import OpenAI
 
@@ -114,21 +115,51 @@ class VisionAPI:
         self.history = [{"role": "user", "content": self.prompt}]
         self.logger.info("Historique des messages réinitialisé.")
 
-    def return_clean_json(self, response):
+    def return_clean_json(self, command):
         """
-        Extrait le contenu JSON propre de la réponse de l'API.
+        Convertit une commande textuelle en JSON.
 
-        :param response: Réponse brute de l'API.
-        :return: Contenu JSON sous forme de chaîne de caractères.
+        :param command: Commande sous forme de chaîne (ex: "turn left 10 True").
+        :return: JSON contenant l'action, la direction, la valeur et l'état.
         """
+        logger = logging.getLogger("CommandParser")
+
         try:
-            json_data = response.split("```json\n")[1].split("\n```")[0]
-            self.logger.debug("Extraction du JSON réussie.")
-            return json_data
-        except IndexError:
-            self.logger.warning("Impossible d'extraire un JSON valide de la réponse.")
-            return None
+            parts = command.split()
+            if len(parts) == 4:
+                if parts[1] == "left":
+                    action ="turn_left"
+                else:
+                    action="turn_right"
+                value = int(parts[2])
+                door = parts[3]
+            elif len(parts) == 3:
+                action = "forward"
+                value = int(parts[1])
+                door = parts[2]
+            elif len(parts) == 2:
+                action = "stop"
+                value = 0
+                door = parts[1]
+            else:
+                logger.error("Commande invalide : %s", command)
+                return None
 
+            action, value, door
+            value = int(value)  # Conversion en entier
+
+            json_data = json.dumps({
+                "action": action,
+                "value": value,
+                "door": door
+            }, indent=3)
+
+            logger.debug("Commande convertie en JSON avec succès.")
+            return json_data
+
+        except Exception as e:
+            logger.error("Erreur lors de la conversion de la commande : %s", e)
+            return None
 
 # Test de la classe
 if __name__ == "__main__":

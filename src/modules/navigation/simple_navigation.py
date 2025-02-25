@@ -136,11 +136,17 @@ class SimpleNavigation:
                 self.motor_control.set_motor_speed(correction, -correction)
             else:
                 self.motor_control.set_motor_speed(-correction, correction)
-
             # Limiter les vitesses entre -100 et 100
             correction = max(-100, min(100, correction))
 
             time.sleep(0.1)  # Pause pour éviter des mises à jour trop rapides
+
+    def stop(self):
+        """
+        Arrête les moteurs immédiatement.
+        """
+        self.motor_control.stop()
+        self.logger.info("Arrêt immédiat des moteurs.") 
 
     def handle_request(self, json_request):
         """
@@ -168,6 +174,10 @@ class SimpleNavigation:
             elif action == "turn_right":
                 self.turn(relative_angle=value)
                 return {"status": "success", "message": f"Tourné à droite de {value}°."}
+            
+            elif action == "stop":
+                self.stop()
+                return {"status": "success", "message": "Arrêt immédiat."}
             
             else:
                 self.logger.warning("Action non reconnue : %s", action)
