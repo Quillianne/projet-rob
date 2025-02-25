@@ -3,18 +3,15 @@
 
 Ce projet Python vise à contrôler un robot roulant équipé de divers capteurs (RPLIDAR, Kinect, IMU, etc.) et d'un contrôleur de moteurs Pololu Maestro, tout en utilisant Hector SLAM pour la navigation et l'évitement d'obstacles.
 
-<<<<<<< Updated upstream
 ## Membres du groupe :
 - Maxime Lefèvre
 - Robin Vidal
 - Kilian Barantal
 - Yasmine Raoux
 
-=======
 
 Lien vers le fichier google docs contenant l'avancement du projet par séances :
 https://docs.google.com/document/d/1WdZpqYGWUWTXwZNBJJRWHQwiuqZebqBb8ohJc7dD8aI/edit?usp=sharing
->>>>>>> Stashed changes
 
 ## 🗂️ Suivi de l'avancement  
 
