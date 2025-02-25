@@ -2,14 +2,25 @@ from modules.controllers.motor_control import MotorControl
 from modules.sensors.imu import IMUSensor
 from modules.sensors.kinect import KinectSensor
 from utils.sensormapper import SensorUSBMapper
+from modules.api.vision_api import VisionAPI
+from modules.navigation.simple_navigation import SimpleNavigation
+
 import time
 import logging
 
 
-logging.getLogger("MotorControl").setLevel(logging.INFO)
-logging.getLogger("IMUSensor").setLevel(logging.INFO)
-# logging.getLogger("freenect2").setLevel(logging.WARNING)
-# logging.getLogger("ktb").setLevel(logging.WARNING)
+#logging.getLogger("MotorControl").setLevel(logging.INFO)
+#logging.getLogger("IMUSensor").setLevel(logging.INFO)
+#logging.getLogger("VisionAPI").setLevel(logging.INFO)
+
+
+# Set root logger level
+logging.getLogger().setLevel(logging.INFO)
+
+# Iterate through all existing loggers and set their level
+for logger_name in logging.root.manager.loggerDict:
+    logging.getLogger(logger_name).setLevel(logging.INFO)
+
 
 if __name__ == "__main__":
     # Initialisation des modules
@@ -21,59 +32,72 @@ if __name__ == "__main__":
         "pololu": {"vid": "1ffb", "pid": "008b"}  # Exemple pour le Pololu Maestro 1ffb:008b
     }
 
+    
+
     # Instanciation de la classe
     mapper = SensorUSBMapper(sensor_config)
 
     # Mapping des capteurs
     sensor_mapping = mapper.map_sensors()
+    print("LIDAR Path: ", sensor_mapping["lidar"])
 
-    # Affichage des résultats
-    print("Sensor Mapping:")
-    for sensor, path in sensor_mapping.items():
-        print(f"{sensor}: {path if path else 'Not Found'}")
 
-"""
-    motors = MotorControl(port='/dev/ttyACM0')
-    imu = IMUSensor(port="/dev/ttyUSB2", baudrate=57600)
-    kinect = KinectSensor(output_dir="kinect_images")
+
+
+    motors = MotorControl(port=sensor_mapping["pololu"])
+    #imu = IMUSensor(port=sensor_mapping["imu"], baudrate=57600)
+
+    navigator = SimpleNavigation(imu_port=sensor_mapping["imu"], motor_port=sensor_mapping["pololu"])
+    api = VisionAPI(api_key="env", prompt="import_txt")
+    #kinect = KinectSensor(output_dir="kinect_images")
 
     try:
         # Connexion à l'IMU
-        imu.connect()
+        #imu.connect()
 
         # Capture initiale des données IMU
-        imu_data = imu.read_data()
-        if imu_data:
-            yaw, pitch, roll = imu_data
-            logging.info(f"Données IMU initiales - HEADING: {yaw}")
+        #imu_data = imu.read_data()
+        #if imu_data:
+        #    yaw, pitch, roll = imu_data
+        #    logging.info(f"Données IMU initiales - HEADING: {yaw}")
 
-        # Capture et affichage de l'image raw_color depuis Kinect
-        frames = kinect.get_raw_color()
-        if frames and "raw_color" in frames:
-            #kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
-            kinect.save_frames(frames)  # Sauvegarde les frames
 
         # Exemple : faire varier la vitesse des moteurs
         for speed in [-100, 0, 100]:
             logging.info(f"Réglage de la vitesse des moteurs à {speed}")
             motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
-            time.sleep(2)
+            time.sleep(0.5)
 
         motors.stop()
 
+        # Capture et affichage de l'image raw_color depuis Kinect
+        #frames = kinect.get_raw_color()
+
+        
+
+        #if frames and "raw_color" in frames:
+        #    kinect.save_frames(frames)  # Sauvegarde les frames
+
+            #kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
+        
+        response = api.send_request(image_path="kinect_images/raw_color.png")
+        response = api.return_clean_json(response)
+        print(response)     
+
+        navigator.handle_request(response)
+
         # Capture des données IMU après les mouvements
-        imu_data = imu.read_data()
-        if imu_data:
-            yaw, pitch, roll = imu_data
-            logging.info(f"Données IMU après les mouvements - HEADING: {yaw}")
+        #imu_data = imu.read_data()
+        #if imu_data:
+        #    yaw, pitch, roll = imu_data
+        #    logging.info(f"Données IMU après les mouvements - HEADING: {yaw}")
 
     except Exception as e:
         logging.error(f"Une erreur est survenue : {e}")
 
     finally:
         # Déconnexion des modules et nettoyage
-        imu.close()
+        #imu.close()
         motors.disconnect()
         logging.info("Programme terminé proprement.")
 
-"""
