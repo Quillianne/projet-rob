@@ -17,9 +17,10 @@ Définitions et conditions à respecter :
 
 Centrage de la porte :
 
-L’objectif principal est de centrer l’ouverture de la porte au milieu de l’image.
+L’objectif principal est de centrer l’ouverture de la porte au milieu de l’image, si la porte est deja centrée va tout droit (forward).
 Si la porte n’est pas centrée, générez une commande de rotation (turn left Y ou turn right Y) pour ajuster l’orientation du robot afin de recentrer la porte.
-Si la porte est centrée (l’ouverture se trouve au centre de l’image), le robot peut avancer vers elle.
+Si la porte est centrée (l’ouverture se trouve au centre de l’image), le robot doit avancer vers elle. (forward)
+Si la porte est loin (l’ouverture se trouve environ au centre de l’image), le robot doit avancer vers elle. (forward)
 Détection et définition d’une porte ouverte :
 
 Une porte est considérée comme ouverte si au moins 70 % de sa largeur est dégagée et visible dans l’image.

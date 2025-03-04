@@ -12,7 +12,7 @@ logging.basicConfig(
 )
 
 class SimpleNavigation:
-    def __init__(self, imu_port="/dev/ttyUSB2", motor_port="/dev/ttyACM0", kp_forward=1.0, kp_turn=1.0):
+    def __init__(self, imu_port="/dev/ttyUSB2", motor_port="/dev/ttyACM0", kp_forward=1.0, kp_turn=3.0):
         """
         Initialise les capteurs, les moteurs et les paramètres de navigation.
 
@@ -49,16 +49,26 @@ class SimpleNavigation:
         self.logger.info("Début de l'avance tout droit avec asservissement (kp=%.2f).", self.kp_forward)
         start_time = time.time()
 
-        # Lire l'orientation initiale
+        timeout = 10  # Timeout en secondes
+        start_time = time.time()  # Début du chronomètre
+
         data = self.imu.read_data()
-        if not data:
-            self.logger.error("Impossible de lire les données de l'IMU pour avancer.")
-            return
+        while not data:
+            if time.time() - start_time > timeout:
+                self.logger.critical("Échec de la lecture des données IMU après 10 secondes. Abandon.")
+                return "Pas de données reçues"  # Sort de la boucle après 10s
+
+            self.logger.error("Impossible de lire les données de l'IMU pour tourner. Nouvelle tentative...")
+            data = self.imu.read_data()
         
         target_yaw, _, _ = data
 
         while time.time() - start_time < duration:
-            data = self.imu.read_data()
+            try :
+                data = self.imu.read_data()
+            except :
+                self.logger.warning("Donnée indisponible pour l'IMU dans read_data()")
+                continue
             if not data:
                 self.logger.warning("Données IMU indisponibles pendant l'avancement.")
                 continue
@@ -90,6 +100,10 @@ class SimpleNavigation:
         self.motor_control.stop()
         self.logger.info("Avancement terminé.")
 
+    def sawtooth(self, angle):
+        """Ramène un angle dans l'intervalle [-180, 180] degrés."""
+        return (angle + 180) % 360 - 180
+
     def turn(self, relative_angle):
         """
         Fait tourner le robot d'un angle relatif donné.
@@ -98,50 +112,61 @@ class SimpleNavigation:
         """
         self.logger.info("Début de la rotation relative de %.2f° avec kp=%.2f.", relative_angle, self.kp_turn)
 
-        # Lire l'orientation initiale
-        data = self.imu.read_data()
-        if not data:
-            self.logger.error("Impossible de lire les données de l'IMU pour tourner.")
-            return
+        timeout = 10  # Timeout en secondes
+        start_time = time.time()  # Début du chronomètre
 
+        data = self.imu.read_data()
+        while not data:
+            if time.time() - start_time > timeout:
+                self.logger.critical("Échec de la lecture des données IMU après 10 secondes. Abandon.")
+                return "Pas de données reçues"  # Sort de la boucle après 10s
+
+            self.logger.error("Impossible de lire les données de l'IMU pour tourner. Nouvelle tentative...")
+            data = self.imu.read_data()
+            
         initial_yaw, _, _ = data
-        target_yaw = (initial_yaw + relative_angle) % 360
+
+        relative_angle = self.sawtooth(relative_angle) #angle donné par chatgpt
+        initial_yaw = self.sawtooth(initial_yaw)
+
+        target_yaw = self.sawtooth(initial_yaw + relative_angle)
 
         while True:
             data = self.imu.read_data()
-            if not data:
+            if data:
+                yaw, pitch, roll = data
+                #print(f"yaw = {yaw}, pitch = {pitch}, roll = {roll}")
+            else:
                 self.logger.warning("Données IMU indisponibles pendant la rotation.")
                 continue
 
-            yaw, _, _ = data
-            error = target_yaw - yaw
+            yaw = self.sawtooth(yaw)
 
             # Normalisation de l'erreur entre -180 et 180
-            if error > 180:
-                error -= 360
-            elif error < -180:
-                error += 360
-            print(initial_yaw, yaw, target_yaw)
+            error = self.sawtooth(target_yaw - yaw)
+
+            #print("initial, yaw, target :", initial_yaw, yaw, target_yaw)
             self.logger.debug("Erreur actuelle : %.2f°", error)
 
             # Si l'orientation cible est atteinte, arrêter la rotation
-            if abs(error) <= 2:  # Tolérance fixe de 2 degrés
+            if abs(error) <= 5:  # Tolérance fixe de 2 degrés
                 self.motor_control.stop()
                 self.logger.info("Rotation terminée. Orientation actuelle : %.2f°", yaw)
                 break
 
             # Appliquer des vitesses proportionnelles pour tourner sur place
-            offset = 30
+            offset = 0
             correction = self.kp_turn * abs(error) + offset
-            print("erreur en degres :", error)
-            if error > 0:
-                self.motor_control.set_motor_speed(correction, -correction)
-            else:
-                self.motor_control.set_motor_speed(-correction, correction)
-            # Limiter les vitesses entre -100 et 100
             correction = max(-100, min(100, correction))
+            #print("erreur en degres :", error)
+            if error > 0:
+                self.motor_control.set_motor_speed(-correction, correction)
+            else:
+                self.motor_control.set_motor_speed(correction, -correction)
+            #Limiter les vitesses entre -100 et 100
+            
 
-            time.sleep(0.1)  # Pause pour éviter des mises à jour trop rapides
+            #time.sleep(0.1)  # Pause pour éviter des mises à jour trop rapides
 
     def stop(self):
         """
@@ -168,7 +193,6 @@ class SimpleNavigation:
             if action == "forward":
                 self.forward()
                 return {"status": "success", "message": "Avancé tout droit."}
-            
             elif action == "turn_left":
                 self.turn(relative_angle=-value)
                 return {"status": "success", "message": f"Tourné à gauche de {value}°."}

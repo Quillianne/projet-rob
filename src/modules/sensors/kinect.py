@@ -62,6 +62,7 @@ class KinectSensor:
                 return
 
             for key, frame in frames.items():
+                frame = cv2.flip(frame, 1)
                 filename = os.path.join(self.output_dir, f"{key}.png")
                 cv2.imwrite(filename, frame)
                 logging.info(f"Frame {key} enregistrée sous {filename}")

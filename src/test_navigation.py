@@ -33,10 +33,10 @@ def main():
 
     try:
         # Exemple : faire varier la vitesse des moteurs pour tester leur initialisation
-        for speed in [-100, 0, 100]:
-            logging.info(f"Réglage de la vitesse des moteurs à {speed}")
-            motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
-            time.sleep(0.5)
+        # for speed in [-100, 0, 100]:
+        #     logging.info(f"Réglage de la vitesse des moteurs à {speed}")
+        #     motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
+        #     time.sleep(0.5)
 
         motors.stop()
         logging.info("Test de variation des vitesses terminé.")
