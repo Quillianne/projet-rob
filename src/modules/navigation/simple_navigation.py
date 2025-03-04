@@ -131,7 +131,9 @@ class SimpleNavigation:
                 break
 
             # Appliquer des vitesses proportionnelles pour tourner sur place
-            correction = self.kp_turn * abs(error)
+            offset = 30
+            correction = self.kp_turn * abs(error) + offset
+            print("erreur en degres :", error)
             if error > 0:
                 self.motor_control.set_motor_speed(correction, -correction)
             else:
