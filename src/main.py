@@ -93,7 +93,36 @@ if __name__ == "__main__":
         #    logging.info(f"Données IMU après les mouvements - HEADING: {yaw}")
 
     except Exception as e:
-        logging.error(f"Une erreur est survenue : {e}")
+        logging.error(f"Une erreur est surveself.kp_turn * abs(error)nue : {e}")
+
+    finally:
+        # Déconnexion des modules et nettoyage
+        #imu.close()
+        motors.disconnect()
+        logging.info("Programme terminé proprement.")
+
+
+        
+
+        if frames and "raw_color" in frames:
+           kinect.save_frames(frames)  # Sauvegarde les frames
+
+           kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
+        
+        response = api.send_request(image_path="kinect_images/raw_color.png")
+        response = api.return_clean_json(response)
+        print(response)     
+
+        navigator.handle_request(response)
+
+        # Capture des données IMU après les mouvements
+        #imu_data = imu.read_data()
+        #if imu_data:
+        #    yaw, pitch, roll = imu_data
+        #    logging.info(f"Données IMU après les mouvements - HEADING: {yaw}")
+
+    except Exception as e:
+        logging.error(f"Une erreur est surveself.kp_turn * abs(error)nue : {e}")
 
     finally:
         # Déconnexion des modules et nettoyage
