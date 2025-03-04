@@ -1,6 +1,5 @@
 from modules.controllers.motor_control import MotorControl
 from modules.sensors.imu import IMUSensor
-from modules.sensors.kinect import KinectSensor
 from utils.sensormapper import SensorUSBMapper
 from modules.api.vision_api import VisionAPI
 from modules.navigation.simple_navigation import SimpleNavigation
@@ -49,8 +48,7 @@ if __name__ == "__main__":
 
     navigator = SimpleNavigation(imu_port=sensor_mapping["imu"], motor_port=sensor_mapping["pololu"])
     api = VisionAPI(api_key="env", prompt="import_txt")
-    kinect = KinectSensor(output_dir="kinect_images")
-
+    
     try:
         # Connexion à l'IMU
         #imu.connect()
@@ -60,42 +58,7 @@ if __name__ == "__main__":
         #if imu_data:
         #    yaw, pitch, roll = imu_data
         #    logging.info(f"Données IMU initiales - HEADING: {yaw}")
-
-
-        # Exemple : faire varier la vitesse des moteurs
-        # for speed in [-100, 0, 100]:
-        #     logging.info(f"Réglage de la vitesse des moteurs à {speed}")
-        #     motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
-        #     time.sleep(0.5)
-
         motors.stop()
-
-        # Capture et affichage de l'image raw_color depuis Kinect
-        print("truc kibnect")
-        frames = kinect.get_raw_color()
-        print("euh")
-
-        
-
-        if frames and "raw_color" in frames:
-           print("dans le if")
-           kinect.save_frames(frames)  # Sauvegarde les frames
-           print("frames saved")
-
-           #kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
-        
-        print("question pr l'api")
-        response = api.send_request(image_path="kinect_images/raw_color.png")
-        response = api.return_clean_json(response)
-        print(response)     
-
-        navigator.handle_request(response)
-
-        # Capture des données IMU après les mouvements
-        #imu_data = imu.read_data()
-        #if imu_data:
-        #    yaw, pitch, roll = imu_data
-        #    logging.info(f"Données IMU après les mouvements - HEADING: {yaw}")
 
     except Exception as e:
         logging.error(f"Une erreur est survenue : {e}")
