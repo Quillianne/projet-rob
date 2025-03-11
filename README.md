@@ -24,6 +24,7 @@ Cette section explique les icônes utilisées pour indiquer l'état d'avancement
 | ⚙️    | **En cours**                 | La tâche est actuellement en cours de réalisation. |
 | ⚠️    | **Bug détecté**             | La tâche a été développée, mais des bugs ont été identifiés. |
 | 🛑    | **Non commencé**             | La tâche n'a pas encore été commencée. |
+| ❌    | **Abandonné**             | La tâche a été abandonné car considéré hors sujet ou plus pertinente. |
 
 
 ## Structure du Projet
@@ -53,8 +54,8 @@ Dossier contenant le code source principal du projet.
     - ✅`maestro_controller.py` : Contrôle des moteurs via le Pololu Maestro.
     - ✅`motor_control.py` : Envoi des commandes de mouvement.
   - **`hector_slam/`** : Modules spécifiques à Hector SLAM.
-    - ⚙️`map_building.py` : Création et mise à jour de la carte.
-    - ⚙️`trajectory_calculation.py` : Calcul des trajectoires basées sur la carte générée.
+    - ❌`map_building.py` : Création et mise à jour de la carte.
+    - ❌`trajectory_calculation.py` : Calcul des trajectoires basées sur la carte générée.
   - **`api/`** : Interfaces avec les APIs externes.
     - ✅`vision_api.py` : Intégration avec l'API Vision pour interpréter les images.
     - 🛑`speech_control.py` : Reconnaissance et traitement des commandes vocales.
