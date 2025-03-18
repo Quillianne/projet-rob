@@ -1,0 +1,25 @@
+de moodle :
+
+A la fin de l’année scolaire (UE 4.4), il faudra :
+Faire une démonstration publique le mardi 29 Avril 2025 du fonctionnement des robots démontrant qu'il y a des résultats correspondant aux attentes ou à défaut qu'il y a eu du travail (penser à inviter vos encadrants extérieurs éventuels et s’assurer qu’ils auront le droit d’accéder à l’école et/ou en visio, attention à bien réserver le matériel et les salles spécifiques éventuels si besoin, attention aux autres projets notamment des autres spécialités). Une vidéo (idéalement publiquement diffusable sur Internet) devra notamment être fournie (peut être une combinaison de simulations, animations, vidéos déjà faites expliquant au mieux la démonstration) 
+
+Rendre pour début Mai 2025 un dossier incluant un guide d’utilisation suffisamment précis pour qu’un groupe d’étudiants puisse faire fonctionner seuls ce qui a été fait, ainsi que tous les éléments nécessaires à la réparation, reprise, modification, développement des prototypes réalisés, avec notamment des suggestions d’améliorations ou solutions alternatives aux choix faits (e.g. peut être décomposé en « Quick Start Guide », « User Manual », « Hardware Maintenance Manual », « Developer Manual », « Rapport d’avancement interne »)
+
+
+« Quick Start Guide » :
+Identification des différentes parties et outils matériels et logiciels que l’utilisateur doit manipuler/se procurer pour une utilisation de base du « produit », les choses à faire dans le bon ordre, s'inspirer
+de ceux fournis avec des produits de la vie quotidienne, pour les produits purement logiciels c’est souvent un ReadMe.txt
+
+« User Manual » :
+Détails de toutes les utilisations possibles supportées, en supposant que le produit fonctionne nominalement
+
+« Hardware Maintenance Manual » :
+Références des pièces de rechange et comment les monter/démonter, comment débuguer (matériellement ou logiciellement) les problèmes courants
+
+« Developer Manual » :
+Explication de l’architecture et logique générale du produit (code, électronique, mécanique), de certains algos ou détails complexes, comment modifier et recompiler les codes, modifier la CAO des
+pièces
+
+« Rapport d’avancement interne » :
+Objectifs initiaux et leur évolution, organisation du projet (chronologie, répartition des tâches), autres informations complémentaires et suggestions éventuelles (e.g. solutions explorées n’ayant pas été retenues, comment rajouter/changer des options/éléments (pièces, capteurs, bibliothèques, algos, etc.) potentiellement utiles mais pas forcément testés)
+

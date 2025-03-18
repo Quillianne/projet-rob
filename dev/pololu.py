@@ -47,28 +47,25 @@ if __name__ == "__main__":
     pololu = PololuController(port='/dev/ttyACM0')
 
     try:
-        # Test des moteurs
-        #print("Déplacement en avant...")
-        #pololu.set_motor_speed(-0.75, 0.25)  # Les deux moteurs à 100% de leur vitesse maximale.
-        #time.sleep(2)
 
-        #print("Déplacement en avant...")
-        #pololu.set_motor_speed(-0.625, 0.125)  # Les deux moteurs à 50%% de leur vitesse maximale.
-        #time.sleep(2)
+        print("Déplacement en avant...")
+    
+        print("Déplacement en avant...")
+        pololu.set_motor_speed(-0.625, 0.125)  # Les deux moteurs à 50%% de leur vitesse maximale.
+        time.sleep(2)
 
-        #print("Rotation sur place...")
-        #pololu.set_motor_speed(-0.375, 0.5)  # Tourne sur place (moteur gauche recule, droit avance).
-        #time.sleep(2)
+        print("Rotation sur place...")
+        pololu.set_motor_speed(-0.375, 0.5)  # Tourne sur place (moteur gauche recule, droit avance).
+        time.sleep(2)
 
-        # for i in np.arange(-1, 1, 0.1):  # Utilisation de np.arange pour des pas décimaux
-        #     print(f"Fonctionne avec {i}")
-        #     pololu.set_motor_speed(i, i)  # Définir la vitesse du moteur gauche
-        #     time.sleep(2)
+        for i in np.arange(-1, 1, 0.1):  # Utilisation de np.arange pour des pas décimaux
+            print(f"Fonctionne avec {i}")
+            pololu.set_motor_speed(i, i)  # Définir la vitesse du moteur gauche
+            time.sleep(2)
 
-            #print("Arrêt...")
-            #pololu.set_motor_speed(-0.5, 0)  # stop les moteurs
-            #time.sleep(1)
-        pololu.set_motor_speed(-0.2, -0.3)
+            print("Arrêt...")
+            pololu.set_motor_speed(0, 0)  # stop les moteurs
+            time.sleep(1)
     finally:
         pololu.disconnect()
         print("Connexion terminée.")

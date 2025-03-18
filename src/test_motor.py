@@ -50,32 +50,27 @@ if __name__ == "__main__":
     navigator = SimpleNavigation(imu_port=sensor_mapping["imu"], motor_port=sensor_mapping["pololu"])
     api = VisionAPI(api_key="env", prompt="import_txt")
     kinect = KinectSensor(output_dir="kinect_images")
-    k = 0 
+
     try:
-        for k in range(10):
-            # Capture et affichage de l'image raw_color depuis Kinect
-            frames = kinect.get_frames()
+        imu = IMUSensor(port="/dev/ttyUSB2", baudrate=57600)
 
-            if frames and "raw_depth" in frames:
-                kinect.save_frames(frames)  # Sauvegarde les frames
-                print("frames saved")
+        # Connexion à l'IMU
+        imu.connect()
 
-            #kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
-            
-            print("Question pour l'api...")
-            response = api.send_request(image_path="kinect_images/raw_color.png")
-            print("Réponse de l'API:")
-            print(response)
-            # Test des 4 derniers charactères
-            print(f"Consigne: {response[-4:]}")
-            if response[-4:] == "TRUE":
-                navigator.forward(2)
-            else:
-                navigator.turn(45)
+        # Capture initiale des données IMU
+        imu_data = imu.read_data()
+        if imu_data:
+           yaw, pitch, roll = imu_data
+           logging.info(f"Données IMU initiales - HEADING: {yaw}")
 
-            api.clear_history()
-            motors.stop()
-            time.sleep(1)
+
+        # Exemple : faire varier la vitesse des moteurs
+        for speed in [-100, 0, 100]:
+            logging.info(f"Réglage de la vitesse des moteurs à {speed}")
+            motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
+            time.sleep(0.5)
+
+        motors.stop()
 
     except Exception as e:
         logging.error(f"Une erreur est surveself.kp_turn * abs(error)nue : {e}")
@@ -86,5 +81,3 @@ if __name__ == "__main__":
         motors.disconnect()
         logging.info("Programme terminé proprement.")
 
-
-            

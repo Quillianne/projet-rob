@@ -57,7 +57,6 @@ class SimpleNavigation:
             if time.time() - start_time > timeout:
                 self.logger.critical("Échec de la lecture des données IMU après 10 secondes. Abandon.")
                 return "Pas de données reçues"  # Sort de la boucle après 10s
-
             self.logger.error("Impossible de lire les données de l'IMU pour tourner. Nouvelle tentative...")
             data = self.imu.read_data()
         

@@ -1,6 +1,5 @@
 from modules.controllers.motor_control import MotorControl
 from modules.sensors.imu import IMUSensor
-from modules.sensors.kinect import KinectSensor
 from utils.sensormapper import SensorUSBMapper
 from modules.api.vision_api import VisionAPI
 from modules.navigation.simple_navigation import SimpleNavigation
@@ -49,36 +48,20 @@ if __name__ == "__main__":
 
     navigator = SimpleNavigation(imu_port=sensor_mapping["imu"], motor_port=sensor_mapping["pololu"])
     api = VisionAPI(api_key="env", prompt="import_txt")
-    kinect = KinectSensor(output_dir="kinect_images")
-    k = 0 
+    
     try:
-        for k in range(10):
-            # Capture et affichage de l'image raw_color depuis Kinect
-            frames = kinect.get_frames()
+        # Connexion à l'IMU
+        #imu.connect()
 
-            if frames and "raw_depth" in frames:
-                kinect.save_frames(frames)  # Sauvegarde les frames
-                print("frames saved")
-
-            #kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
-            
-            print("Question pour l'api...")
-            response = api.send_request(image_path="kinect_images/raw_color.png")
-            print("Réponse de l'API:")
-            print(response)
-            # Test des 4 derniers charactères
-            print(f"Consigne: {response[-4:]}")
-            if response[-4:] == "TRUE":
-                navigator.forward(2)
-            else:
-                navigator.turn(45)
-
-            api.clear_history()
-            motors.stop()
-            time.sleep(1)
+        # Capture initiale des données IMU
+        #imu_data = imu.read_data()
+        #if imu_data:
+        #    yaw, pitch, roll = imu_data
+        #    logging.info(f"Données IMU initiales - HEADING: {yaw}")
+        motors.stop()
 
     except Exception as e:
-        logging.error(f"Une erreur est surveself.kp_turn * abs(error)nue : {e}")
+        logging.error(f"Une erreur est survenue : {e}")
 
     finally:
         # Déconnexion des modules et nettoyage
@@ -86,5 +69,3 @@ if __name__ == "__main__":
         motors.disconnect()
         logging.info("Programme terminé proprement.")
 
-
-            

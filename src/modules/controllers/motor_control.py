@@ -1,5 +1,7 @@
 import logging
 from modules.controllers.maestro_controller import MaestroController
+from utils.sensormapper import SensorUSBMapper
+import time
 
 # Configuration de base pour le logging
 logging.basicConfig(
@@ -52,3 +54,24 @@ class MotorControl:
         """Déconnecte le contrôleur Pololu."""
         self.logger.info("Déconnexion du contrôleur Maestro")
         self.controller.disconnect()
+
+
+if __name__ == "__main__":
+    sensor_config = {
+        "pololu": {"vid": "1ffb", "pid": "008b"}  # Exemple pour le Pololu Maestro 1ffb:008b
+    }
+    # Instanciation de la classe
+    mapper = SensorUSBMapper(sensor_config)
+
+    # Mapping des capteurs
+    sensor_mapping = mapper.map_sensors()
+    motors = MotorControl(port=sensor_mapping["pololu"])
+    try :
+        for speed in [-100, 0, 100]:
+            motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
+            time.sleep(0.5)
+    
+    except Exception as e:
+        print("Erreur survenue :", e)
+
+    
