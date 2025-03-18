@@ -24,6 +24,7 @@ Cette section explique les icônes utilisées pour indiquer l'état d'avancement
 | ⚙️    | **En cours**                 | La tâche est actuellement en cours de réalisation. |
 | ⚠️    | **Bug détecté**             | La tâche a été développée, mais des bugs ont été identifiés. |
 | 🛑    | **Non commencé**             | La tâche n'a pas encore été commencée. |
+| ❌    | **Abandonné**             | La tâche a été abandonné car considéré hors sujet ou plus pertinente. |
 
 
 ## Structure du Projet
@@ -44,27 +45,24 @@ Dossier contenant le code source principal du projet.
     - 🛑`path_planning.py` : Algorithmes de planification de trajectoire (e.g., A*, Dijkstra).
     - 🛑`obstacle_avoidance.py` : Évitement des obstacles en temps réel.
     - 🛑`localization.py` : Gestion de la localisation via Hector SLAM et les capteurs.
-    - 🟡`simple_navigation.py` : Navigation simple avec des commandes simples (foward, turn_right, turn_left)
+    - ✅`simple_navigation.py` : Navigation simple avec des commandes simples (foward, turn_right, turn_left)
   - **`sensors/`** : Interfaces pour les capteurs.
     - ⚙️`lidar.py` : Gestion des données du RPLIDAR.
     - ✅`kinect.py` : Traitement des images et des profondeurs capturées par la Kinect.
     - ✅`imu.py` : Lecture des données de l'IMU.
-    - 🛑`camera_processing.py` : Analyse des images capturées pour détecter des objets d'intérêt.
   - **`controllers/`** : Gestion des moteurs et des interactions avec le matériel.
     - ✅`maestro_controller.py` : Contrôle des moteurs via le Pololu Maestro.
     - ✅`motor_control.py` : Envoi des commandes de mouvement.
   - **`hector_slam/`** : Modules spécifiques à Hector SLAM.
-    - ⚙️`map_building.py` : Création et mise à jour de la carte.
-    - ⚙️`trajectory_calculation.py` : Calcul des trajectoires basées sur la carte générée.
+    - ❌`map_building.py` : Création et mise à jour de la carte.
+    - ❌`trajectory_calculation.py` : Calcul des trajectoires basées sur la carte générée.
   - **`api/`** : Interfaces avec les APIs externes.
-    - 🟡`vision_api.py` : Intégration avec l'API Vision pour interpréter les images.
-    - 🛑`commands.py` : Traduction des réponses de l'API en actions pour le robot.
+    - ✅`vision_api.py` : Intégration avec l'API Vision pour interpréter les images.
     - 🛑`speech_control.py` : Reconnaissance et traitement des commandes vocales.
     
 - **`utils/`**
   - 🛑`logger.py` : Gestion centralisée des journaux d'activité.
-  - 🛑`data_processing.py` : Outils pour traiter les données brutes issues des capteurs.
-  - 🟡`sensormapper.py` : Mapper les capteurs à leurs emplacements USB
+  - ✅`sensormapper.py` : Mapper les capteurs à leurs emplacements USB
 
 ### **2. `tests/`**
 Dossier contenant les tests unitaires et fonctionnels pour vérifier le bon fonctionnement de chaque module.
