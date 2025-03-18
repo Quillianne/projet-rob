@@ -1,72 +1,112 @@
-import logging
-import time
+from modules.controllers.motor_control import MotorControl
+from modules.sensors.imu import IMUSensor
 from modules.sensors.kinect import KinectSensor
-from modules.navigation.simple_navigation import SimpleNavigation
+from utils.sensormapper import SensorUSBMapper
 from modules.api.vision_api import VisionAPI
+from modules.navigation.simple_navigation import SimpleNavigation
 
-def main():
-    # Configuration globale du logging
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger("Main")
+import time
+import logging
 
-    try:
-        # Initialisation du capteur Kinect
-        logger.info("Initialisation du capteur Kinect...")
-        kinect = KinectSensor(output_dir="kinect_images")
-        frames = kinect.get_frames()
-        if not frames:
-            logger.error("Aucune frame capturée depuis le Kinect.")
-            return
 
-        # Sauvegarde des frames capturées
-        kinect.save_frames(frames)
-        # Optionnel : Affichage de la frame couleur
-        # if "color" in frames:
-        #     kinect.display_frame(frames["color"], window_name="Kinect Color Frame")
+#logging.getLogger("MotorControl").setLevel(logging.INFO)
+#logging.getLogger("IMUSensor").setLevel(logging.INFO)
+#logging.getLogger("VisionAPI").setLevel(logging.INFO)
 
-        # Initialisation de la VisionAPI et envoi de la requête avec l'image capturée
-        logger.info("Envoi de la requête à l'API Vision...")
-        vision_api = VisionAPI(api_key="env", prompt="import_txt")
-        image_path = "kinect_images/raw_color.png"
-        response_api = vision_api.send_request(image_path=image_path)
-        if not response_api:
-            logger.error("Échec de la requête à l'API Vision.")
-            return
 
-        # Extraction du JSON propre depuis la réponse de l'API
-        json_response = vision_api.return_clean_json(response_api)
-        if not json_response:
-            logger.error("Impossible d'extraire un JSON valide de la réponse API.")
-            return
+# Set root logger level
+logging.getLogger().setLevel(logging.INFO)
 
-        logger.info("Réponse API extraite : %s", json_response)
+# Iterate through all existing loggers and set their level
+for logger_name in logging.root.manager.loggerDict:
+    logging.getLogger(logger_name).setLevel(logging.INFO)
 
-        # Initialisation du système de navigation simple
-        logger.info("Initialisation du système de navigation...")
-        navigator = SimpleNavigation(
-            imu_port="/dev/ttyUSB2",
-            motor_port="/dev/ttyACM0",
-            kp_forward=1.5,
-            kp_turn=1.2
-        )
-
-        # Envoi de la commande de navigation extraite de l'API
-        nav_response = navigator.handle_request(json_response)
-        logger.info("Réponse de la navigation : %s", nav_response)
-
-        # Pause pour laisser le temps aux actions de s'exécuter
-        time.sleep(2)
-
-    except Exception as e:
-        logger.error("Une erreur est survenue : %s", e)
-    finally:
-        # Arrêt propre du système de navigation
-        try:
-            if 'navigator' in locals():
-                navigator.shutdown()
-        except Exception as shutdown_error:
-            logger.error("Erreur lors de l'arrêt de la navigation : %s", shutdown_error)
-        logger.info("Programme terminé proprement.")
 
 if __name__ == "__main__":
-    main()
+    # Initialisation des modules
+
+    # Configuration des capteurs avec leurs VID et PID
+    sensor_config = {
+        "lidar": {"vid": "10c4", "pid": "ea60"},  # Exemple pour le RPLIDAR 10c4:ea60
+        "imu": {"vid": "1a86", "pid": "7523"},    # Exemple pour l'IMU OpenLog 1a86:7523
+        "pololu": {"vid": "1ffb", "pid": "008b"}  # Exemple pour le Pololu Maestro 1ffb:008b
+    }
+
+    
+
+    # Instanciation de la classe
+    mapper = SensorUSBMapper(sensor_config)
+
+    # Mapping des capteurs
+    sensor_mapping = mapper.map_sensors()
+    print("LIDAR Path: ", sensor_mapping["lidar"])
+
+
+
+
+    motors = MotorControl(port=sensor_mapping["pololu"])
+    #imu = IMUSensor(port=sensor_mapping["imu"], baudrate=57600)
+
+    navigator = SimpleNavigation(imu_port=sensor_mapping["imu"], motor_port=sensor_mapping["pololu"])
+    api = VisionAPI(api_key="env", prompt="import_txt")
+    kinect = KinectSensor(output_dir="kinect_images")
+    k = 0 
+    try:
+        while k < 10:
+
+            # Connexion à l'IMU
+            #imu.connect()
+
+            # Capture initiale des données IMU
+            #imu_data = imu.read_data()
+            #if imu_data:
+            #    yaw, pitch, roll = imu_data
+            #    logging.info(f"Données IMU initiales - HEADING: {yaw}")
+
+
+            # Exemple : faire varier la vitesse des moteurs
+            # for speed in [-100, 0, 100]:
+            #     logging.info(f"Réglage de la vitesse des moteurs à {speed}")
+            #     motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
+            #     time.sleep(0.5)
+
+            motors.stop()
+
+            # Capture et affichage de l'image raw_color depuis Kinect
+            frames = kinect.get_frames()
+
+            if frames and "raw_depth" in frames:
+                kinect.save_frames(frames)  # Sauvegarde les frames
+                print("frames saved")
+
+            #kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
+            
+            print("Question pour l'api...")
+            response = api.send_request(image_path="kinect_images/raw_color.png")
+            print("Réponse de l'API:")
+            print(response)
+            # Test des 4 derniers charactères
+            print(f"Consigne: {response[-4:]}")
+            if response[-4:] == "TRUE":
+                navigator.forward(2)
+            else:
+                navigator.turn(45)
+
+            # Capture des données IMU après les mouvements
+            #imu_data = imu.read_data()
+            #if imu_data:
+            #    yaw, pitch, roll = imu_data
+            #    logging.info(f"Données IMU après les mouvements - HEADING: {yaw}")
+            k+=1
+
+    except Exception as e:
+        logging.error(f"Une erreur est surveself.kp_turn * abs(error)nue : {e}")
+
+    finally:
+        # Déconnexion des modules et nettoyage
+        #imu.close()
+        motors.disconnect()
+        logging.info("Programme terminé proprement.")
+
+
+            

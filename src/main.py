@@ -71,22 +71,19 @@ if __name__ == "__main__":
         motors.stop()
 
         # Capture et affichage de l'image raw_color depuis Kinect
-        print("truc kibnect")
         frames = kinect.get_frames()
 
-        print("euh")
-
-        
-
         if frames and "raw_depth" in frames:
-           print("dans le if")
            kinect.save_frames(frames)  # Sauvegarde les frames
            print("frames saved")
 
            #kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
         
-        print("question pr l'api")
+        print("Question pour l'api...")
         response = api.send_request(image_path="kinect_images/raw_color.png")
+        print("Réponse de l'API:")
+        print(response)
+
         response = api.return_clean_json(response)
         print(response)     
 
@@ -107,5 +104,3 @@ if __name__ == "__main__":
         motors.disconnect()
         logging.info("Programme terminé proprement.")
 
-
-        
