@@ -17,9 +17,10 @@ if __name__ == "__main__":
     sensor_mapping = mapper.map_sensors()
     motors = MotorControl(port=sensor_mapping["pololu"])
     try :
-        for speed in [-100, 0, 100]:
+        for speed in [-100, 0, 100, 0]:
             motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
             time.sleep(0.5)
+
     
     except Exception as e:
         print("Erreur survenue :", e)

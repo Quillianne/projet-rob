@@ -4,6 +4,7 @@ from modules.sensors.kinect import KinectSensor
 from utils.sensormapper import SensorUSBMapper
 from modules.api.vision_api import VisionAPI
 from modules.navigation.simple_navigation import SimpleNavigation
+from modules.speech.sound import Sound
 
 import time
 import logging
@@ -50,6 +51,7 @@ if __name__ == "__main__":
     navigator = SimpleNavigation(imu_port=sensor_mapping["imu"], motor_port=sensor_mapping["pololu"])
     api = VisionAPI(api_key="env", prompt="import_txt")
     kinect = KinectSensor(output_dir="kinect_images")
+    son = Sound()
     k = 0 
     try:
         for k in range(10):
@@ -66,6 +68,7 @@ if __name__ == "__main__":
             response = api.send_request(image_path="kinect_images/raw_color.png")
             print("Réponse de l'API:")
             print(response)
+            son.text_to_speech(response)
             # Test des 4 derniers charactères
             print(f"Consigne: {response[-4:]}")
             if response[-4:] == "TRUE":
