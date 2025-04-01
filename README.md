@@ -140,37 +140,39 @@ Débrancher et rebrancher la batterie de la kinect. Relancer le terminal.
 
 
 ## Instructions pour l'Installation
-1. Clonez ce dépôt :
+
+
+1. **Clonez ce dépôt :**  
    ```bash
    git clone https://github.com/Quillianne/projet-rob
    ```
-2. Installez les dépendances :
+   
+2. **Installez libfreenect2 :**  
+   - Sur les systèmes basés sur Debian/Ubuntu, vous pouvez tenter :
+     ```bash
+     sudo apt-get update
+     sudo apt-get install libfreenect2
+     ```
+   - Selon votre distribution et votre environnement, vous devrez peut-être compiler libfreenect2 depuis [son dépôt GitHub](https://github.com/OpenKinect/libfreenect2). Consultez la documentation correspondante pour plus de détails. Attention ça peut être un point un peu compliqué
+
+3. **Installez les dépendances Python :**  
    ```bash
    pip install -r requirements.txt
    ```
-3. Lancez le projet :
+
+4. **Lancez le projet :**  
    ```bash
    python src/main.py
    ```
 
 ---
 
-## Tests
-Pour exécuter les tests, utilisez la commande :
-```bash
-pytest tests/
-```
-
----
 
 ## Objectifs du Projet
 Ce projet a pour but de :
-1. Naviguer dans un environnement inconnu en utilisant Hector SLAM et le LIDAR.
+1. Naviguer dans un environnement inconnu en utilisant la caméra et ChatGPT
 2. Éviter les obstacles en temps réel grâce à l'IMU et d'autres capteurs.
 3. Utiliser une caméra Kinect et des algorithmes d'API Vision pour détecter des objets d'intérêt.
-4. Réagir aux commandes vocales pour ajuster la trajectoire du robot.
+4. Expliquer ses choix grâce à des haut-parleurs
 
----
 
-## Contributions
-Les contributions sont les bienvenues ! Merci de soumettre vos Pull Requests en respectant la structure modulaire du projet.
