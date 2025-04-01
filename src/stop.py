@@ -3,7 +3,7 @@ from modules.sensors.imu import IMUSensor
 from utils.sensormapper import SensorUSBMapper
 from modules.api.vision_api import VisionAPI
 from modules.navigation.simple_navigation import SimpleNavigation
-
+from config.settings import SENSOR_MAP
 import time
 import logging
 
@@ -17,11 +17,7 @@ for logger_name in logging.root.manager.loggerDict:
 
 if __name__ == "__main__":
     # Configuration des capteurs avec leurs VID et PID
-    sensor_config = {
-        "lidar": {"vid": "10c4", "pid": "ea60"},  # Exemple pour le RPLIDAR 10c4:ea60
-        "imu": {"vid": "1a86", "pid": "7523"},    # Exemple pour l'IMU OpenLog 1a86:7523
-        "pololu": {"vid": "1ffb", "pid": "008b"}  # Exemple pour le Pololu Maestro 1ffb:008b
-    }
+    sensor_config = SENSOR_MAP
 
     # Instanciation de la classe
     mapper = SensorUSBMapper(sensor_config)

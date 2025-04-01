@@ -1,6 +1,7 @@
 from modules.controllers.motor_control import MotorControl
 from modules.sensors.imu import IMUSensor
 from utils.sensormapper import SensorUSBMapper
+from config.settings import SENSOR_MAP
 
 import time
 import logging
@@ -8,7 +9,7 @@ import logging
 
 if __name__ == "__main__":
     sensor_config = {
-        "pololu": {"vid": "1ffb", "pid": "008b"}  # Exemple pour le Pololu Maestro 1ffb:008b
+        "pololu": SENSOR_MAP["pololu"]  # Exemple pour le Pololu Maestro 1ffb:008b
     }
     # Instanciation de la classe
     mapper = SensorUSBMapper(sensor_config)

@@ -5,6 +5,7 @@ from utils.sensormapper import SensorUSBMapper
 from modules.api.vision_api import VisionAPI
 from modules.navigation.simple_navigation import SimpleNavigation
 from modules.speech.sound import Sound
+from config.settings import SENSOR_MAP
 
 import time
 import logging
@@ -27,11 +28,7 @@ if __name__ == "__main__":
     # Initialisation des modules
 
     # Configuration des capteurs avec leurs VID et PID
-    sensor_config = {
-        "lidar": {"vid": "10c4", "pid": "ea60"},  # Exemple pour le RPLIDAR 10c4:ea60
-        "imu": {"vid": "1a86", "pid": "7523"},    # Exemple pour l'IMU OpenLog 1a86:7523
-        "pololu": {"vid": "1ffb", "pid": "008b"}  # Exemple pour le Pololu Maestro 1ffb:008b
-    }
+    sensor_config = SENSOR_MAP
     # Mapping des capteurs
     mapper = SensorUSBMapper(sensor_config)
     sensor_mapping = mapper.map_sensors()
