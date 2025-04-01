@@ -91,7 +91,7 @@ Dossier pour la documentation du projet.
 ### 1. Brancher les batteries  
 Suivre les indications des scotch :  
 - **12V** → Kinect  
-- **12V** → Moteurs  
+- **12V** (batterie 3S) → Moteurs  
 - **19V** → Ordinateur (puis l’allumer et attendre ~1 min)  
 
 ### 2. Connexion SSH  
@@ -126,7 +126,7 @@ Suivre les indications des scotch :
 - ` ModuleNotFoundError: No module named 'modules' ` 
 - ` ModuleNotFoundError: No module named 'pydub' `
 
-  Lancer les programmes avec le bon environnement (sur VS Code choisir l'environnement en bas à droite)
+  Lancer les programmes avec le bon environnement (sur VS Code choisir l'environnement en bas à droite) ou sinon bien faire source start_venv.sh
 
 2. Erreur kinect
 - `[Error] [protocol::CommandTransaction] bulk transfer failed: LIBUSB_ERROR_TIMEOUT Operation timed out
