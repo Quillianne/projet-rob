@@ -28,18 +28,10 @@ def main():
     # Initialisation des modules en s'appuyant sur le mapping des capteurs
     motors = MotorControl(port=sensor_mapping["pololu"])
     navigator = SimpleNavigation(imu_port=sensor_mapping["imu"], motor_port=sensor_mapping["pololu"])
-    api = VisionAPI(api_key="env", prompt="import_txt")
-    kinect = KinectSensor(output_dir="kinect_images")
+
 
     try:
-        # Exemple : faire varier la vitesse des moteurs pour tester leur initialisation
-        # for speed in [-100, 0, 100]:
-        #     logging.info(f"Réglage de la vitesse des moteurs à {speed}")
-        #     motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
-        #     time.sleep(0.5)
-
         motors.stop()
-        logging.info("Test de variation des vitesses terminé.")
 
         ##### Ajouter les tests de navigation ici #####
         

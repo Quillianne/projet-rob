@@ -85,6 +85,41 @@ Dossier pour la documentation du projet.
 
 ---
 
+
+## Quick Start Guide  
+
+### 1. Brancher les batteries  
+Suivre les indications des scotch :  
+- **12V** → Kinect  
+- **12V** → Moteurs  
+- **19V** → Ordinateur (puis l’allumer et attendre ~1 min)  
+
+### 2. Connexion SSH  
+#### Via VS Code  
+1. **Ouvrir la palette de commandes** : `Ctrl + Shift + P`  
+2. **Ajouter un nouvel hôte SSH** :  
+   - Sélectionner : `Remote-SSH: Add new SSH Host...`  
+   - Ajouter : `tahlesoufs-desktop.local`  
+   - Sélectionner un fichier de configuration SSH (ex: `/home/user/.ssh/config`)  
+3. **Se connecter à l'hôte** :  
+   - `Ctrl + Shift + P` → `Remote-SSH: Connect to Host...`  
+   - Sélectionner : `tahlesoufs-desktop.local`  
+4. **Attendre la connexion** et entrer le mot de passe : `vive la rob!`  
+
+### 3. Lancement de la mission  
+1. **Activer l’environnement** :  
+   ```sh
+   source start_venv.sh
+   ```
+2. **Lancer le programme `src/main.py`**:
+    ```sh
+    cd src/
+    python3 main.py
+    ```
+
+
+## User Manual
+
 ## Instructions pour l'Installation
 1. Clonez ce dépôt :
    ```bash

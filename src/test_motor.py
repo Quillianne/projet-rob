@@ -41,9 +41,6 @@ if __name__ == "__main__":
     sensor_mapping = mapper.map_sensors()
     print("LIDAR Path: ", sensor_mapping["lidar"])
 
-
-
-
     motors = MotorControl(port=sensor_mapping["pololu"])
     #imu = IMUSensor(port=sensor_mapping["imu"], baudrate=57600)
 
