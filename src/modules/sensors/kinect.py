@@ -88,11 +88,8 @@ class KinectSensor:
 
 # Exemple d'utilisation autonome
 if __name__ == "__main__":
-    print("a")
     logging.basicConfig(level=logging.INFO)
-    print("b")
     kinect_sensor = KinectSensor(output_dir="kinect_images")
-    print("c")
     try:
         frames = kinect_sensor.get_raw_color()
         kinect_sensor.save_frames(frames)

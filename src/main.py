@@ -4,6 +4,7 @@ from modules.sensors.kinect import KinectSensor
 from utils.sensormapper import SensorUSBMapper
 from modules.api.vision_api import VisionAPI
 from modules.navigation.simple_navigation import SimpleNavigation
+from modules.speech.sound import Sound
 
 import time
 import logging
@@ -31,76 +32,56 @@ if __name__ == "__main__":
         "imu": {"vid": "1a86", "pid": "7523"},    # Exemple pour l'IMU OpenLog 1a86:7523
         "pololu": {"vid": "1ffb", "pid": "008b"}  # Exemple pour le Pololu Maestro 1ffb:008b
     }
-
-    
-
-    # Instanciation de la classe
-    mapper = SensorUSBMapper(sensor_config)
-
     # Mapping des capteurs
+    mapper = SensorUSBMapper(sensor_config)
     sensor_mapping = mapper.map_sensors()
-    print("LIDAR Path: ", sensor_mapping["lidar"])
-
-
-
 
     motors = MotorControl(port=sensor_mapping["pololu"])
-    #imu = IMUSensor(port=sensor_mapping["imu"], baudrate=57600)
+    imu = IMUSensor(port=sensor_mapping["imu"], baudrate=57600)
+    for speed in [-100, 0, 100]:
+        logging.info(f"Réglage de la vitesse des moteurs à {speed}")
+        motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
+        time.sleep(0.5)
+    motors.stop()
 
     navigator = SimpleNavigation(imu_port=sensor_mapping["imu"], motor_port=sensor_mapping["pololu"])
     api = VisionAPI(api_key="env", prompt="import_txt")
     kinect = KinectSensor(output_dir="kinect_images")
-
+    son = Sound()
+    k = 0 
     try:
-        # Connexion à l'IMU
-        #imu.connect()
+        for k in range(10):
+            # Capture et affichage de l'image raw_color depuis Kinect
+            frames = kinect.get_frames()
 
-        # Capture initiale des données IMU
-        #imu_data = imu.read_data()
-        #if imu_data:
-        #    yaw, pitch, roll = imu_data
-        #    logging.info(f"Données IMU initiales - HEADING: {yaw}")
+            if frames and "raw_depth" in frames:
+                kinect.save_frames(frames)  # Sauvegarde les frames
+                print("frames saved")
+            
+            print("Question pour l'api...")
+            response = api.send_request(image_path="kinect_images/raw_color.png")
+            print("Réponse de l'API:")
+            print(response)
+            son.text_to_speech(response)
+            # Test des 4 derniers charactères
+            print(f"Consigne: {response[-4:]}")
+            if response[-4:] == "TRUE":
+                navigator.forward(2)
+            else:
+                navigator.turn(45)
 
-
-        # Exemple : faire varier la vitesse des moteurs
-        # for speed in [-100, 0, 100]:
-        #     logging.info(f"Réglage de la vitesse des moteurs à {speed}")
-        #     motors.set_motor_speed(speed, speed)  # Moteur gauche et droit en synchronisation
-        #     time.sleep(0.5)
-
-        motors.stop()
-
-        # Capture et affichage de l'image raw_color depuis Kinect
-        frames = kinect.get_frames()
-
-        if frames and "raw_depth" in frames:
-           kinect.save_frames(frames)  # Sauvegarde les frames
-           print("frames saved")
-
-           #kinect.display_frame(frames["raw_color"], window_name="Kinect Raw Color Frame")
-        
-        print("Question pour l'api...")
-        response = api.send_request(image_path="kinect_images/raw_color.png")
-        print("Réponse de l'API:")
-        print(response)
-
-        response = api.return_clean_json(response)
-        print(response)     
-
-        navigator.handle_request(response)
-
-        # Capture des données IMU après les mouvements
-        #imu_data = imu.read_data()
-        #if imu_data:
-        #    yaw, pitch, roll = imu_data
-        #    logging.info(f"Données IMU après les mouvements - HEADING: {yaw}")
+            api.clear_history()
+            motors.stop()
+            time.sleep(1)
 
     except Exception as e:
         logging.error(f"Une erreur est surveself.kp_turn * abs(error)nue : {e}")
 
     finally:
         # Déconnexion des modules et nettoyage
-        #imu.close()
+        imu.close()
         motors.disconnect()
         logging.info("Programme terminé proprement.")
 
+
+            

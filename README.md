@@ -38,13 +38,13 @@ Dossier contenant le code source principal du projet.
 
 - **`config/`**
 
-  - 🛑`settings.py` : Contient les configurations globales (paramètres des capteurs, chemins de fichiers, etc.).
+  - ❌`settings.py` : Contient les configurations globales (paramètres des capteurs, chemins de fichiers, etc.).
 
 - **`modules/`**
   - **`navigation/`** : Gestion des fonctionnalités liées au mouvement du robot.
-    - 🛑`path_planning.py` : Algorithmes de planification de trajectoire (e.g., A*, Dijkstra).
-    - 🛑`obstacle_avoidance.py` : Évitement des obstacles en temps réel.
-    - 🛑`localization.py` : Gestion de la localisation via Hector SLAM et les capteurs.
+    - ❌`path_planning.py` : Algorithmes de planification de trajectoire (e.g., A*, Dijkstra).
+    - ❌`obstacle_avoidance.py` : Évitement des obstacles en temps réel.
+    - ❌`localization.py` : Gestion de la localisation via Hector SLAM et les capteurs.
     - ✅`simple_navigation.py` : Navigation simple avec des commandes simples (foward, turn_right, turn_left)
   - **`sensors/`** : Interfaces pour les capteurs.
     - ⚙️`lidar.py` : Gestion des données du RPLIDAR.
@@ -58,19 +58,19 @@ Dossier contenant le code source principal du projet.
     - ❌`trajectory_calculation.py` : Calcul des trajectoires basées sur la carte générée.
   - **`api/`** : Interfaces avec les APIs externes.
     - ✅`vision_api.py` : Intégration avec l'API Vision pour interpréter les images.
-    - 🛑`speech_control.py` : Reconnaissance et traitement des commandes vocales.
+    - ❌`speech_control.py` : Reconnaissance et traitement des commandes vocales.
     
 - **`utils/`**
-  - 🛑`logger.py` : Gestion centralisée des journaux d'activité.
+  - ❌`logger.py` : Gestion centralisée des journaux d'activité.
   - ✅`sensormapper.py` : Mapper les capteurs à leurs emplacements USB
 
 ### **2. `tests/`**
 Dossier contenant les tests unitaires et fonctionnels pour vérifier le bon fonctionnement de chaque module.
-- 🛑`test_navigation.py` : Tests pour les fonctionnalités de navigation.
-- 🛑`test_sensors.py` : Tests pour les capteurs.
-- 🛑`test_controllers.py` : Tests pour les contrôleurs.
-- 🛑`test_hector_slam.py` : Tests pour Hector SLAM.
-- 🛑`test_api.py` : Tests pour l'intégration avec les APIs externes.
+- ❌`test_navigation.py` : Tests pour les fonctionnalités de navigation.
+- ❌`test_sensors.py` : Tests pour les capteurs.
+- ❌`test_controllers.py` : Tests pour les contrôleurs.
+- ❌`test_hector_slam.py` : Tests pour Hector SLAM.
+- ❌`test_api.py` : Tests pour l'intégration avec les APIs externes.
 
 ### **3. `docs/`**
 Dossier pour la documentation du projet.
@@ -119,6 +119,25 @@ Suivre les indications des scotch :
 
 
 ## User Manual
+
+### Erreurs possibles
+1. Erreurs d'environnement python
+- ` ModuleNotFoundError: No module named 'ktb' ` 
+- ` ModuleNotFoundError: No module named 'modules' ` 
+- ` ModuleNotFoundError: No module named 'pydub' `
+
+  Lancer les programmes avec le bon environnement (sur VS Code choisir l'environnement en bas à droite)
+
+2. Erreur kinect
+- `[Error] [protocol::CommandTransaction] bulk transfer failed: LIBUSB_ERROR_TIMEOUT Operation timed out
+INFO:root:Répertoire de sortie configuré : kinect_images`
+
+Débrancher et rebrancher la batterie de la kinect. Relancer le terminal.
+
+
+
+
+
 
 ## Instructions pour l'Installation
 1. Clonez ce dépôt :
