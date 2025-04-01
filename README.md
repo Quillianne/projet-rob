@@ -1,7 +1,7 @@
 
 # Autonomous guidance using OpenAI
 
-Ce projet Python vise à contrôler un robot roulant équipé de divers capteurs (RPLIDAR, Kinect, IMU, etc.) et d'un contrôleur de moteurs Pololu Maestro, tout en utilisant Hector SLAM pour la navigation et l'évitement d'obstacles.
+Ce projet Python vise à contrôler un robot roulant équipé de divers capteurs (RPLIDAR, Kinect, IMU, etc.) et d'un contrôleur de moteurs Pololu Maestro, tout en utilisant CHATGPT pour la navigation et l'évitement d'obstacles.
 
 ## Membres du groupe :
 - Maxime Lefèvre
